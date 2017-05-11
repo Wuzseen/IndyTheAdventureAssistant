@@ -3,6 +3,23 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
+    <style>
+
+    .imageroot {
+      width: 512px;
+      height: 286px;
+      background-color: black;
+      /*padding-bottom: 56.25%; /* 16:9 */*/
+      position: relative;
+    }
+
+    #gifdisplay {
+      max-height: 100%;
+      max-width: 100%;
+      margin: auto;
+      display: block;
+    }
+    </style>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
@@ -12,10 +29,6 @@
           socket.emit('chat message', $('#m').val());
           $('#m').val('');
           return false;
-        });
-
-        socket.on('userconnection', function(msg) {
-          $('#messages').append('<li>').text(msg.text);
         });
 
         socket.on('searchresult', function(msg) {
@@ -39,10 +52,8 @@
     </style>
   </head>
   <body>
-    <img id="gifdisplay" src=""></img>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+    <div class="imageroot">
+      <img id="gifdisplay" src=""></img>
+    </div>
   </body>
 </html>
