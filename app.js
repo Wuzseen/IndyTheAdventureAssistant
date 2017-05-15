@@ -10,13 +10,8 @@ var io = require('socket.io')(http);
 
 var accessToken = "";
 
-console.log(gfycat);
-
 gfycat.authenticate((err, data) => {
-  console.log(err);
-  console.log(data);
   accessToken = data.access_token;
-  console.log('token', accessToken);
 });
 
 app.get('/', function(req,res) {
@@ -26,12 +21,11 @@ app.get('/', function(req,res) {
 function rand(val)
 {
   var r = Math.floor(Math.random() * val);
-  console.log(val, r);
   return r;
 }
 
 io.on('connection', function(socket){
-  console.log('a user connected');
+  console.log('User Connected');
   io.emit('userconnection', {text: 'hello'});
   if(accessToken != "")
   {
@@ -43,7 +37,7 @@ io.on('connection', function(socket){
       searchGIF('Goodbye');
     }
     io.emit('userconnection', {text: 'goodbye'});
-    console.log('user disconnected');
+    console.log('User Disconnected');
   });
 });
 
@@ -53,13 +47,12 @@ function searchGIF(query) {
     count: 20,
     first: 30
   }, (err, data) => {
-    console.log('Search Result: ', data);
     io.emit('searchresult', {url: data.gfycats[rand(20)].gifUrl});
   });
 }
 
 http.listen(3000, function() {
-  console.log('listening on *:3000');
+  console.log('Listening On *:3000');
 });
 
 // gfycat.authenticate( (err, res) => {
