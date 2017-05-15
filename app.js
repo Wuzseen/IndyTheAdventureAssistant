@@ -36,7 +36,7 @@ io.on('connection', function(socket){
   {
     searchGIF('Hello');
   }
-  socket.on('disconnect', function() {
+  socket.on('disconnect', function() { // disconnect handler starts here
     if(accessToken != "")
     {
       searchGIF('Goodbye');
@@ -48,12 +48,13 @@ io.on('connection', function(socket){
 
 // Search the gfycat api and emit the url of the found gif to connected clients
 function searchGIF(query) {
+  var searchCount = 20;
   gfycat.search({
     search_text: query,
-    count: 20,
+    count: searchCount,
     first: 30
   }, (err, data) => {
-    io.emit('searchresult', {url: data.gfycats[rand(20)].gifUrl});
+    io.emit('searchresult', {url: data.gfycats[rand(searchCount)].gifUrl});
   });
 }
 
