@@ -10,20 +10,25 @@ var io = require('socket.io')(http);
 
 var accessToken = "";
 
+// Login to gfycat
 gfycat.authenticate((err, data) => {
   accessToken = data.access_token;
 });
 
+// Serve the webpage to view the assistant on
 app.get('/', function(req,res) {
   res.sendFile(__dirname + '/index.html');
 });
 
+// Shortcut for getting a random value between [0,val]
 function rand(val)
 {
   var r = Math.floor(Math.random() * val);
   return r;
 }
 
+// Listen for connections/disonnections on the socket.
+// On a connection, emit a hello gif. On a disconnect, emit a goodbye gif.
 io.on('connection', function(socket){
   console.log('User Connected');
   io.emit('userconnection', {text: 'hello'});
@@ -41,6 +46,7 @@ io.on('connection', function(socket){
   });
 });
 
+// Search the gfycat api and emit the url of the found gif to connected clients
 function searchGIF(query) {
   gfycat.search({
     search_text: query,
@@ -52,14 +58,5 @@ function searchGIF(query) {
 }
 
 http.listen(3000, function() {
-  console.log('Listening On *:3000');
+  console.log('Listening On Port:3000.\nNavigate to localhost:3000');
 });
-
-// gfycat.authenticate( (err, res) => {
-//   expect(err).to.not.exist;
-//   expect(res).to.exist;
-//   expect(res).to.contain.keys('token_type', 'scope', 'expires_in', 'access_token');
-//   expect(res.token_type).to.equal('bearer');
-//   expect(res.access_token).to.be.a('string');
-//   done();
-// });
