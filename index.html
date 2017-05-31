@@ -42,6 +42,19 @@
           newImg.id = 'gifdisplay';
           oldImg.parentNode.replaceChild(newImg, oldImg);
         });
+
+        socket.on('userconnection', function(msg) {
+          if(msg.text == 'goodbye')
+          {
+            setTimeout(ready, 5000);
+          }
+        });
+
+        ready();
+
+        function ready() {
+          socket.emit('assistantready', 'ready');
+        };
       });
     </script>
     <style>

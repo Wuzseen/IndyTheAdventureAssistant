@@ -20,6 +20,11 @@ app.get('/', function(req,res) {
   res.sendFile(__dirname + '/index.html');
 });
 
+// Simple status check
+app.get('/status/', function(req,res) {
+  res.send('ready');
+});
+
 // Shortcut for getting a random value between [0,val]
 function rand(val)
 {
@@ -36,18 +41,32 @@ io.on('connection', function(socket){
   {
     searchGIF('Hello');
   }
+  socket.on('danger', function() {
+    searchGIF('danger');
+    io.emit('dangerdisplay', {text:"danger is active"});
+    console.log('Displaying danger gif');
+  });
+  socket.on('find', function(msg) {
+    searchGIF(msg.search);
+    console.log("Doing gif search: " + msg.search);
+  });
   socket.on('disconnect', function() { // disconnect handler starts here
-    if(accessToken != "")
-    {
-      searchGIF('Goodbye');
-    }
+    searchGIF('Goodbye');
     io.emit('userconnection', {text: 'goodbye'});
     console.log('User Disconnected');
+  });
+  socket.on('assistantready', function() {
+    searchGIF('sleeping');
+    console.log('Assistant is now sleeping');
   });
 });
 
 // Search the gfycat api and emit the url of the found gif to connected clients
 function searchGIF(query) {
+  if(accessToken == "")
+  {
+    return;
+  }
   var searchCount = 20;
   gfycat.search({
     search_text: query,
