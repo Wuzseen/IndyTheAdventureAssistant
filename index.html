@@ -17,6 +17,15 @@
       justify-content:center;
     }
 
+    .botright {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      padding-right: 5px;
+      padding-bottom: 5px;
+      color: white;
+    }
+
     #gifdisplay {
       max-height: 100%;
       max-width: 100%;
@@ -36,6 +45,8 @@
         });
 
         socket.on('searchresult', function(msg) {
+          var text = document.getElementById('debug');
+          text.innerHTML = msg.str;
           var oldImg = document.getElementById('gifdisplay');
           var newImg = new Image();
           newImg.src = msg.url;
@@ -71,6 +82,7 @@
   <body>
     <div class="imageroot">
       <img id="gifdisplay" src=""></img>
+      <p class="botright" id="debug"></p>
     </div>
   </body>
 </html>

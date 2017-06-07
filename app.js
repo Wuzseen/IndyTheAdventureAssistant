@@ -73,7 +73,10 @@ function searchGIF(query) {
     count: searchCount,
     first: 30
   }, (err, data) => {
-    io.emit('searchresult', {url: data.gfycats[rand(searchCount)].gifUrl});
+    io.emit('searchresult', {
+      url: data.gfycats[rand(searchCount)].gifUrl,
+      str: query
+    });
   });
 }
 
